@@ -1,4 +1,4 @@
 # tocomfome
 To com fome delivery
 
-Projeto realizado por ANdré Luis e Diefersons
+Projeto realizado por André Luis e Dieferson Romanoski.
