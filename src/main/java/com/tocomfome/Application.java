@@ -1,45 +1,80 @@
 package com.tocomfome;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.tocomfome.model.Produto;
-import com.tocomfome.repository.ProdutoRepository;
+import com.tocomfome.enumerator.RoleEnum;
+import com.tocomfome.model.Usuario;
+import com.tocomfome.repository.UsuarioRepository;
+import com.tocomfome.service.AdminService;
+import com.tocomfome.service.ApplicationService;
+import com.tocomfome.util.ListUtil;
 
 @SpringBootApplication
 @EnableJpaRepositories
 public class Application implements CommandLineRunner {
 
-    @Autowired
-    ProdutoRepository produtoRepository;
+	@Autowired
+	@Lazy
+	private ApplicationService applicationService;
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+	@Autowired
+	@Lazy
+	private AdminService adminService;
 
-    @Override
-    public void run(String... args) {
-        System.out.println("Teste!");
+	@Autowired
+	@Lazy
+	private UsuarioRepository usuarioRepository;
 
-        Scanner teclado = new Scanner(System.in);
+	private Optional<Usuario> optionalUsuario;
 
-        Produto oProduto = new Produto();
-        System.out.println("Informe a descricao:");
-        oProduto.setDescricao(teclado.nextLine());
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
 
-        oProduto.setAtivo(true);
-        System.out.println("Informe o valor:");
-        oProduto.setValor(teclado.nextBigDecimal());
+	@Override
+	public void run(String... args) {
+		System.out.println("Seja bem vindo To com fome delivery!");
+		try (Scanner teclado = new Scanner(System.in)) {
+			System.out.println("Login ou cadastro(1/2)?");
+			int iOpcao = (Integer) applicationService.lerOpcao(teclado, ListUtil.toListArray(1, 2));
 
-        teclado.close();
+			switch (iOpcao) {
+			case 1: {
+				System.out.println("Informe o email");
+				Optional<Usuario> optionalUsuario = usuarioRepository.findByEmail(teclado.nextLine());
 
-        produtoRepository.save(oProduto);
-        produtoRepository.findAll().forEach(oprod -> System.out.println(oprod.toString()));
-    }
+				if (optionalUsuario.isPresent()) {
+					if (!applicationService.login(teclado, optionalUsuario.get()))
+						applicationService.matarAplicacao();
+				} else {
+					System.out.println("Email não encontrado!");
+					applicationService.matarAplicacao();
+				}
 
+				break;
+			}
+
+			default:
+				break;
+			}
+
+			switch (RoleEnum.getValueOf(optionalUsuario.get().getRole())) {
+			case ADMIN: {
+				adminService.menuAdmin(teclado);
+				break;
+			}
+
+			default:
+				applicationService.matarAplicacao();
+			}
+		}
+	}
 }
