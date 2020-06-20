@@ -33,7 +33,7 @@ public class Application implements CommandLineRunner {
 	@Lazy
 	private UsuarioRepository usuarioRepository;
 
-	private Optional<Usuario> optionalUsuario;
+	private Usuario usuario;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -49,10 +49,13 @@ public class Application implements CommandLineRunner {
 			switch (iOpcao) {
 			case 1: {
 				System.out.println("Informe o email");
+				teclado.nextLine();
 				Optional<Usuario> optionalUsuario = usuarioRepository.findByEmail(teclado.nextLine());
 
 				if (optionalUsuario.isPresent()) {
-					if (!applicationService.login(teclado, optionalUsuario.get()))
+					usuario = optionalUsuario.get();
+				
+					if (!applicationService.login(teclado, usuario))
 						applicationService.matarAplicacao();
 				} else {
 					System.out.println("Email não encontrado!");
@@ -66,7 +69,7 @@ public class Application implements CommandLineRunner {
 				break;
 			}
 
-			switch (RoleEnum.getValueOf(optionalUsuario.get().getRole())) {
+			switch (RoleEnum.getValueOf(usuario.getRole())) {
 			case ADMIN: {
 				adminService.menuAdmin(teclado);
 				break;

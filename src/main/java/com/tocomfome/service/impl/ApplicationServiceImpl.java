@@ -23,8 +23,11 @@ public class ApplicationServiceImpl implements ApplicationService {
 			return teclado.nextLong();
 		else if (type.equals(BigDecimal.class))
 			return teclado.nextBigDecimal();
+		else if (type.equals(Integer.class))
+			return teclado.nextInt();
 
 		return teclado.nextLine();
+		
 	}
 
 	@Override
