@@ -45,6 +45,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 	public Boolean login(Scanner teclado, Usuario usuario) {
 		System.out.println("Digite sua senha:");
 		String senha = teclado.nextLine();
+		if (usuario.getSenha().equals(senha)) {
+			return true;
+		}
 		int i = 0;
 
 		do {
@@ -55,6 +58,11 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 			System.out.println("Senha inválida! Informe novamente:");
 			senha = teclado.nextLine();
+			/*if(usuario.getSenha().equals(senha)) {
+				return true;
+			}*/
+			//teclado.nextLine();
+			
 			i++;
 		} while (!usuario.getSenha().equals(senha));
 

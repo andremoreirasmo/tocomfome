@@ -43,7 +43,7 @@ public class Application implements CommandLineRunner {
 	public void run(String... args) {
 		System.out.println("Seja bem vindo To com fome delivery!");
 		try (Scanner teclado = new Scanner(System.in)) {
-			System.out.println("Login ou cadastro(1/2)?");
+			System.out.println("Escolha a opção: 1- Login | 2 - Cadastro");
 			int iOpcao = (Integer) applicationService.lerOpcao(teclado, ListUtil.toListArray(1, 2));
 
 			switch (iOpcao) {
