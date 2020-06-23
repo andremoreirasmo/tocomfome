@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.tocomfome.enumerator.AdminActionsEnum;
+import com.tocomfome.enumerator.StatusPedidoEnum;
 import com.tocomfome.model.Pedido;
 import com.tocomfome.model.Produto;
 import com.tocomfome.repository.PedidoRepository;
@@ -70,7 +72,8 @@ public class AdminServiceImpl implements AdminService {
 				break;
 			}
 			case EDITAR_PEDIDO: {
-
+				editarPedido(teclado);
+				break;
 			}
 
 			default:
@@ -94,9 +97,19 @@ public class AdminServiceImpl implements AdminService {
 
 		if (oOptionalPedido.isPresent()) {
 			Pedido oPedido = oOptionalPedido.get();
+			List<StatusPedidoEnum> listaStatus = StatusPedidoEnum
+					.getListaStatusValidos(StatusPedidoEnum.getValueOf(oPedido.getStatus()));
 
-			System.out.println("Informe");
+			if (listaStatus == null) {
+				System.out.println("Não é possivel alterar o pedido!");
+			} else {
+				System.out.println("Status disponiveis:");
+				listaStatus.forEach(status -> System.out.println(status.getIntValue() + " - " + status.getDescricao()));
 
+				System.out.println("Informe um status: ");
+				oPedido.setStatus((Long) applicationService.lerOpcao(teclado,
+						listaStatus.stream().map(StatusPedidoEnum::getIntValue).collect(Collectors.toList())));
+			}
 		} else {
 			System.out.println("Pedido não encontrado");
 		}
@@ -154,7 +167,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	private void excluirProduto(Scanner teclado) {
-		listarProduto();
+		listarProduto();// Todo:
 
 		System.out.println("Informe o código do produto:");
 
