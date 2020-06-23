@@ -53,14 +53,16 @@ public class ApplicationServiceImpl implements ApplicationService {
 		do {
 			if (i == 4) {
 				System.out.println("Erro de login");
+				
 				return false;
+			
 			}
 
 			System.out.println("Senha inválida! Informe novamente:");
 			senha = teclado.nextLine();
-			/*if(usuario.getSenha().equals(senha)) {
+			if(usuario.getSenha().equals(senha)) {
 				return true;
-			}*/
+			}
 			//teclado.nextLine();
 			
 			i++;
