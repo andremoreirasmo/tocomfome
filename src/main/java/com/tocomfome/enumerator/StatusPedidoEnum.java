@@ -1,7 +1,10 @@
 package com.tocomfome.enumerator;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.tocomfome.util.ListUtil;
 
 public enum StatusPedidoEnum {
 	NAO_CONFIRMADO(1L, "Pedido ainda não confirmado"),
@@ -42,5 +45,20 @@ public enum StatusPedidoEnum {
 
 	public static StatusPedidoEnum getValueOf(Long codigo) {
 		return map.get(codigo);
+	}
+
+	public static List<StatusPedidoEnum> getListaStatusValidos(StatusPedidoEnum status) {
+		switch (status) {
+		case NAO_CONFIRMADO:
+			return ListUtil.toListArray(CONFIRMADO, RECUSADO, EM_PREPARO);
+		case CONFIRMADO:
+			return ListUtil.toListArray(EM_PREPARO, ENTREGA, FINALIZADO);
+		case EM_PREPARO:
+			return ListUtil.toListArray(ENTREGA, FINALIZADO);
+		case ENTREGA:
+			return ListUtil.toListArray(FINALIZADO);
+		default:
+			return null;
+		}
 	}
 }
