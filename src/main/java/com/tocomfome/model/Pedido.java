@@ -26,6 +26,11 @@ public class Pedido {
 		return id;
 	}
 
+	@Override
+	public String toString() {
+		return "Pedido [id=" + id + ", status=" + status + ", endereco=" + endereco + "]";
+	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
