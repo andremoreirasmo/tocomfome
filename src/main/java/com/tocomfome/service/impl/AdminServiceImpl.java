@@ -18,6 +18,7 @@ import com.tocomfome.repository.PedidoRepository;
 import com.tocomfome.repository.ProdutoRepository;
 import com.tocomfome.service.AdminService;
 import com.tocomfome.service.ApplicationService;
+import com.tocomfome.service.ProdutoService;
 import com.tocomfome.util.ListUtil;
 
 @Service
@@ -34,6 +35,10 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	@Lazy
 	private PedidoRepository pedidoRepository;
+
+	@Autowired
+	@Lazy
+	private ProdutoService produtoService;
 
 	@Override
 	public void menuAdmin(Scanner teclado) {
@@ -116,31 +121,16 @@ public class AdminServiceImpl implements AdminService {
 
 	}
 
-	private void setarInfoProdutos(Produto produto, Scanner teclado) {
-		System.out.println("Informe o nome do produto:");
-		produto.setDescricao(teclado.nextLine());
-
-		System.out.println("Informe o valor do produto:");
-		produto.setValor(teclado.nextBigDecimal());
-
-		System.out.println("Informe os ingredientes:");
-		produto.setIgredientes(teclado.nextLine());
-	}
-
 	private void editarProduto(Scanner teclado) {
 		listarProduto();
 
 		System.out.println("Informe o código do produto:");
 
-		Optional<Produto> oOptionalProduto = produtoRepository.findById(teclado.nextLong());
+		produtoService.getProduto(teclado.nextLong()).ifPresent(oProduto -> {
+			produtoService.setarInformacoesProdutos(oProduto, teclado);
 
-		if (oOptionalProduto.isPresent()) {
-			Produto oProduto = oOptionalProduto.get();
-			setarInfoProdutos(oProduto, teclado);
-		} else {
-			System.out.println("Produto não encontrado");
-		}
-
+			produtoRepository.save(oProduto);
+		});
 	}
 
 	private void novoProduto(Scanner teclado) {
@@ -151,8 +141,7 @@ public class AdminServiceImpl implements AdminService {
 		do {
 			Produto oProduto = new Produto();
 
-			setarInfoProdutos(oProduto, teclado);
-
+			produtoService.setarInformacoesProdutos(oProduto, teclado);
 			listaProdutos.add(oProduto);
 
 			System.out.println("Deseja continuar? [Sim: 1 / Não: 2]");
@@ -163,16 +152,18 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	private void listarProduto() {
-		produtoRepository.findAll().forEach(oProduto -> System.out.println(oProduto.toString()));
+		produtoRepository.findByAtivoTrue().forEach(oProduto -> System.out.println(oProduto.toString()));
 	}
 
 	private void excluirProduto(Scanner teclado) {
-		listarProduto();// Todo:
+		listarProduto();
 
 		System.out.println("Informe o código do produto:");
+		produtoService.getProduto(teclado.nextLong()).ifPresent(oProduto -> {
+			oProduto.setAtivo(false);
 
-		produtoRepository.deleteById(teclado.nextLong());
-
+			produtoRepository.save(oProduto);
+		});
 	}
 
 }
