@@ -27,6 +27,9 @@ public class Produto {
 	@Column(name = "igredientes")
 	private String igredientes;
 
+	@Column(name = "ativo")
+	private boolean ativo;
+
 	public Long getId() {
 		return id;
 	}
@@ -57,6 +60,20 @@ public class Produto {
 
 	public void setIgredientes(String igredientes) {
 		this.igredientes = igredientes;
+	}
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	@Override
+	public String toString() {
+		return "Produto [id=" + id + ", descricao=" + descricao + ", valor=" + valor + ", igredientes=" + igredientes
+				+ ", ativo=" + ativo + "]";
 	}
 
 }
