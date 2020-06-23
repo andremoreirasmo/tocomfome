@@ -27,7 +27,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 			return teclado.nextInt();
 
 		return teclado.nextLine();
-		
+
 	}
 
 	@Override
@@ -43,29 +43,23 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	@Override
 	public Boolean login(Scanner teclado, Usuario usuario) {
-		System.out.println("Digite sua senha:");
-		String senha = teclado.nextLine();
-		if (usuario.getSenha().equals(senha)) {
-			return true;
-		}
+		String senha;
 		int i = 0;
 
+		System.out.println("Informe sua senha:");
 		do {
 			if (i == 4) {
 				System.out.println("Erro de login");
-				
 				return false;
-			
 			}
 
-			System.out.println("Senha inválida! Informe novamente:");
 			senha = teclado.nextLine();
-			if(usuario.getSenha().equals(senha)) {
+			if (usuario.getSenha().equals(senha)) {
 				return true;
 			}
-			//teclado.nextLine();
-			
 			i++;
+
+			System.out.println("Senha inválida! Informe novamente:");
 		} while (!usuario.getSenha().equals(senha));
 
 		return true;
@@ -74,5 +68,6 @@ public class ApplicationServiceImpl implements ApplicationService {
 	@Override
 	public void matarAplicacao() {
 		SpringApplication.exit(applicationContext, () -> 0);
+		System.exit(0);
 	}
 }
