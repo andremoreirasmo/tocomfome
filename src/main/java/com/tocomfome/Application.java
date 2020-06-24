@@ -15,6 +15,7 @@ import com.tocomfome.model.Usuario;
 import com.tocomfome.repository.UsuarioRepository;
 import com.tocomfome.service.AdminService;
 import com.tocomfome.service.ApplicationService;
+import com.tocomfome.service.UserService;
 import com.tocomfome.util.ListUtil;
 
 @SpringBootApplication
@@ -28,6 +29,10 @@ public class Application implements CommandLineRunner {
 	@Autowired
 	@Lazy
 	private AdminService adminService;
+
+	@Autowired
+	@Lazy
+	private UserService userService;
 
 	@Autowired
 	@Lazy
@@ -54,7 +59,7 @@ public class Application implements CommandLineRunner {
 
 				if (optionalUsuario.isPresent()) {
 					usuario = optionalUsuario.get();
-				
+
 					if (!applicationService.login(teclado, usuario))
 						applicationService.matarAplicacao();
 				} else {
@@ -73,6 +78,9 @@ public class Application implements CommandLineRunner {
 			case ADMIN: {
 				adminService.menuAdmin(teclado);
 				break;
+			}
+			case USER: {
+
 			}
 
 			default:
