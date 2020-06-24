@@ -9,7 +9,7 @@ public enum UserActionsEnum {
 
 	CANCELAR_PEDIDO(2L, "Cancelar pedido"),
 
-	STATUS_DO_PEDIDO(3L, "Status do pedido"),
+	PEDIDOS(3L, "Listar pedidos"),
 
 	SAIR(4L, "Sair");
 

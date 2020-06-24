@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import com.tocomfome.dto.PedidoDTO;
 import com.tocomfome.enumerator.RoleEnum;
 import com.tocomfome.enumerator.UserActionsEnum;
 import com.tocomfome.model.Usuario;
@@ -14,6 +15,7 @@ import com.tocomfome.repository.PedidoRepository;
 import com.tocomfome.repository.ProdutoRepository;
 import com.tocomfome.repository.UsuarioRepository;
 import com.tocomfome.service.ApplicationService;
+import com.tocomfome.service.PedidoService;
 import com.tocomfome.service.ProdutoService;
 import com.tocomfome.service.UserService;
 import com.tocomfome.util.ListUtil;
@@ -41,6 +43,10 @@ public class UserServiceImpl implements UserService {
 	@Lazy
 	private ApplicationService applicationService;
 
+	@Autowired
+	@Lazy
+	private PedidoService pedidoService;
+
 	@Override
 	public void menuUser(Scanner teclado) {
 		System.out.println("Bem vindo usuário");
@@ -64,8 +70,8 @@ public class UserServiceImpl implements UserService {
 				cancelarPedido(teclado);
 				break;
 			}
-			case STATUS_DO_PEDIDO: {
-				statusPedido(teclado);
+			case PEDIDOS: {
+				Pedidos(teclado);
 				break;
 			}
 
@@ -102,19 +108,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private void fazerPedido(Scanner teclado) {
-		int iOpcao;
-		do {
-			produtoRepository.findByAtivoTrue().forEach(oProduto -> System.out.println(oProduto.toString()));
+		PedidoDTO oPedido = pedidoService.efetuarPedido(teclado);
 
-			iOpcao = (Integer) applicationService.lerOpcao(teclado, ListUtil.toListArray(1, 2));
-		} while (iOpcao != 2);
+		System.out.println("Deseja efetivar pedido? [Sim: 1 / Não: 2]");
+		if (applicationService.lerOpcao(teclado, ListUtil.toListArray(1, 2)).equals(1))
+			pedidoService.salvarPedido(teclado, oPedido);
 	}
 
 	private void cancelarPedido(Scanner teclado) {
 
 	}
 
-	private void statusPedido(Scanner teclado) {
+	private void Pedidos(Scanner teclado) {
 
 	}
 
