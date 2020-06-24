@@ -70,6 +70,11 @@ public class Application implements CommandLineRunner {
 				break;
 			}
 
+			case 2: {
+				usuario = userService.cadastroUser(teclado);
+				break;
+			}
+
 			default:
 				break;
 			}
@@ -80,7 +85,8 @@ public class Application implements CommandLineRunner {
 				break;
 			}
 			case USER: {
-
+				userService.menuUser(teclado);
+				break;
 			}
 
 			default:

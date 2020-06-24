@@ -1,16 +1,22 @@
 package com.tocomfome.service.impl;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import com.tocomfome.enumerator.RoleEnum;
 import com.tocomfome.enumerator.UserActionsEnum;
+import com.tocomfome.model.Usuario;
 import com.tocomfome.repository.PedidoRepository;
 import com.tocomfome.repository.ProdutoRepository;
+import com.tocomfome.repository.UsuarioRepository;
+import com.tocomfome.service.ApplicationService;
 import com.tocomfome.service.ProdutoService;
 import com.tocomfome.service.UserService;
+import com.tocomfome.util.ListUtil;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,6 +32,14 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	@Lazy
 	private ProdutoRepository produtoRepository;
+
+	@Autowired
+	@Lazy
+	private UsuarioRepository usuarioRepository;
+
+	@Autowired
+	@Lazy
+	private ApplicationService applicationService;
 
 	@Override
 	public void menuUser(Scanner teclado) {
@@ -43,15 +57,15 @@ public class UserServiceImpl implements UserService {
 
 			switch (action) {
 			case FAZER_PEDIDO: {
-
+				fazerPedido(teclado);
 				break;
 			}
 			case CANCELAR_PEDIDO: {
-
+				cancelarPedido(teclado);
 				break;
 			}
 			case STATUS_DO_PEDIDO: {
-
+				statusPedido(teclado);
 				break;
 			}
 
@@ -63,14 +77,45 @@ public class UserServiceImpl implements UserService {
 		} while (action != UserActionsEnum.SAIR);
 	}
 
-	private void fazerPedido() {
+	@Override
+	public Usuario cadastroUser(Scanner teclado) {
+		System.out.println("Informe o email:");
+		String sEmail = teclado.nextLine();
+
+		Optional<Usuario> optionalUsuario = usuarioRepository.findByEmail(sEmail);
+
+		optionalUsuario.ifPresent(user -> {
+			System.out.println("Email já cadastrado!");
+			applicationService.matarAplicacao();
+		});
+
+		Usuario oUsuario = new Usuario();
+		oUsuario.setEmail(sEmail);
+
+		System.out.println("Informe uma senha:");
+		oUsuario.setSenha(teclado.nextLine());
+
+		oUsuario.setRole(RoleEnum.USER.getIntValue());
+		usuarioRepository.save(oUsuario);
+
+		return oUsuario;
+	}
+
+	private void fazerPedido(Scanner teclado) {
+		int iOpcao;
 		do {
 			produtoRepository.findByAtivoTrue().forEach(oProduto -> System.out.println(oProduto.toString()));
-			
-			
-			
-			
-		}while();
+
+			iOpcao = (Integer) applicationService.lerOpcao(teclado, ListUtil.toListArray(1, 2));
+		} while (iOpcao != 2);
+	}
+
+	private void cancelarPedido(Scanner teclado) {
+
+	}
+
+	private void statusPedido(Scanner teclado) {
+
 	}
 
 }
