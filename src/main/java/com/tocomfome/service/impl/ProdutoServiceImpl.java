@@ -26,8 +26,11 @@ public class ProdutoServiceImpl implements ProdutoService {
 		System.out.println("Informe o valor do produto:");
 		produto.setValor(teclado.nextBigDecimal());
 
+		teclado.nextLine();
 		System.out.println("Informe os ingredientes:");
 		produto.setIgredientes(teclado.nextLine());
+
+		produto.setAtivo(true);
 	}
 
 	@Override
