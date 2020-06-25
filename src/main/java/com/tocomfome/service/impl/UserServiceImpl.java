@@ -116,6 +116,8 @@ public class UserServiceImpl implements UserService {
 	private void fazerPedido(Scanner teclado) {
 		PedidoDTO oPedido = pedidoService.efetuarPedido(teclado);
 
+		// Todo: Exibir produtos e quantidade, valor unitario, valor total produto
+		// Todo: Endereco e valor total pedido
 		System.out.println("Deseja efetivar pedido? [Sim: 1 / Não: 2]");
 		if (applicationService.lerOpcao(teclado, ListUtil.toListArray(1, 2)).equals(1))
 			pedidoService.salvarPedido(teclado, oPedido);
@@ -137,6 +139,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private void Pedidos(Scanner teclado) {
+		// Todo: Endereco e valor total pedido
 		List<Pedido> listaPedidos = pedidoRepository.findAll();
 		listaPedidos.forEach(oPedido -> System.out.println(oPedido.toString()));
 
