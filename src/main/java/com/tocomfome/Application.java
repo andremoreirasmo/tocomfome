@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -41,7 +42,10 @@ public class Application implements CommandLineRunner {
 	private Usuario usuario;
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		System.out.println("Iniciando aplicação...");
+		SpringApplication app = new SpringApplication(Application.class);
+		app.setBannerMode(Banner.Mode.OFF);
+		app.run(args);
 	}
 
 	@Override
