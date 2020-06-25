@@ -5,6 +5,7 @@ import static com.tocomfome.enumerator.StatusPedidoEnum.NAO_CONFIRMADO;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -121,5 +122,19 @@ public class PedidoServiceImpl implements PedidoService {
 	@Override
 	public List<DetalhePedido> getDetalhePedido(Long idPedido) {
 		return detalhePedidoRepository.findByidPedido(idPedido);
+	}
+
+	@Override
+	public Optional<Pedido> getPedido(Scanner teclado, List<Pedido> listaPedido) {
+		System.out.println("Informe o codigo do pedido:");
+
+		Long iCodigoPedido = teclado.nextLong();
+		Optional<Pedido> optionalPedido = listaPedido.stream().filter(oPedido -> oPedido.getId().equals(iCodigoPedido))
+				.findAny();
+
+		if (optionalPedido.isPresent())
+			System.out.println("Codigo do pedido inválido!");
+
+		return optionalPedido;
 	}
 }

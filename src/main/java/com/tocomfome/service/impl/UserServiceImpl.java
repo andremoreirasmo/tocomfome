@@ -1,5 +1,9 @@
 package com.tocomfome.service.impl;
 
+import static com.tocomfome.enumerator.StatusPedidoEnum.CONFIRMADO;
+import static com.tocomfome.enumerator.StatusPedidoEnum.NAO_CONFIRMADO;
+import static com.tocomfome.enumerator.StatusPedidoEnum.RECUSADO;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -118,7 +122,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private void cancelarPedido(Scanner teclado) {
+		List<Pedido> listaPedidos = pedidoRepository.findAll();
+		listaPedidos.forEach(oPedido -> System.out.println(oPedido.toString()));
 
+		pedidoService.getPedido(teclado, listaPedidos).ifPresent(oPedido -> {
+			if (ListUtil.toListArray(NAO_CONFIRMADO.getIntValue(), CONFIRMADO.getIntValue())
+					.indexOf(oPedido.getStatus()) >= 0) {
+				oPedido.setStatus(RECUSADO.getIntValue());
+				pedidoRepository.save(oPedido);
+			} else {
+				System.out.println("Não é possivel cancelar o pedido!");
+			}
+		});
 	}
 
 	private void Pedidos(Scanner teclado) {
@@ -127,17 +142,11 @@ public class UserServiceImpl implements UserService {
 
 		System.out.println("O que deseja fazer? [Detalhar pedido: 1/ Voltar: 2]");
 		if (applicationService.lerOpcao(teclado, ListUtil.toListArray(1, 2)).equals(1)) {
-			System.out.println("Informe o codigo do pedido:");
-			Long iCodigoPedido = teclado.nextLong();
-			Optional<Pedido> optionalPedido = listaPedidos.stream()
-					.filter(oPedido -> oPedido.getId().equals(iCodigoPedido)).findAny();
 
-			if (optionalPedido.isPresent()) {
-				pedidoService.getDetalhePedido(iCodigoPedido)
+			pedidoService.getPedido(teclado, listaPedidos).ifPresent(oPedido -> {
+				pedidoService.getDetalhePedido(oPedido.getId())
 						.forEach(oDetalhe -> System.out.println(oDetalhe.toString()));
-			} else {
-				System.out.println("Codigo do pedido inválido!");
-			}
+			});
 		}
 	}
 
