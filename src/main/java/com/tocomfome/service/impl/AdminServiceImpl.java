@@ -127,6 +127,7 @@ public class AdminServiceImpl implements AdminService {
 		System.out.println("Informe o código do produto:");
 
 		produtoService.getProduto(teclado.nextLong()).ifPresent(oProduto -> {
+			teclado.nextLine();
 			produtoService.setarInformacoesProdutos(oProduto, teclado);
 
 			produtoRepository.save(oProduto);
@@ -141,6 +142,7 @@ public class AdminServiceImpl implements AdminService {
 		do {
 			Produto oProduto = new Produto();
 
+			teclado.nextLine();
 			produtoService.setarInformacoesProdutos(oProduto, teclado);
 			listaProdutos.add(oProduto);
 

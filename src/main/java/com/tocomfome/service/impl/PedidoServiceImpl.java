@@ -104,6 +104,7 @@ public class PedidoServiceImpl implements PedidoService {
 		oRetorno.setPedido(new Pedido());
 		oRetorno.getPedido().setStatus(NAO_CONFIRMADO.getIntValue());
 
+		teclado.nextLine();
 		System.out.println("Informe o endereço da entrega:");
 		oRetorno.getPedido().setEndereco(teclado.nextLine());
 		return oRetorno;
@@ -123,6 +124,7 @@ public class PedidoServiceImpl implements PedidoService {
 
 	@Override
 	public List<DetalhePedido> getDetalhePedido(Long idPedido) {
+		// Todo: Buscar a descricao do produto
 		return detalhePedidoRepository.findByidPedido(idPedido);
 	}
 
@@ -131,10 +133,10 @@ public class PedidoServiceImpl implements PedidoService {
 		System.out.println("Informe o codigo do pedido:");
 
 		Long iCodigoPedido = teclado.nextLong();
-		Optional<Pedido> optionalPedido = listaPedido.stream().filter(oPedido -> oPedido.getId().equals(iCodigoPedido))
-				.findAny();
 
-		if (optionalPedido.isPresent())
+		Optional<Pedido> optionalPedido = listaPedido.stream().filter(oPedido -> oPedido.getId().equals(iCodigoPedido))
+				.findFirst();
+		if (!optionalPedido.isPresent())
 			System.out.println("Codigo do pedido inválido!");
 
 		return optionalPedido;

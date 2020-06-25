@@ -139,7 +139,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private void Pedidos(Scanner teclado) {
-		// Todo: Endereco e valor total pedido
+		// Todo: Endereco e valor total pedido, busca so do usuario logado
 		List<Pedido> listaPedidos = pedidoRepository.findAll();
 		listaPedidos.forEach(oPedido -> System.out.println(oPedido.toString()));
 
