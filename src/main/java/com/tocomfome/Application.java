@@ -71,6 +71,7 @@ public class Application implements CommandLineRunner {
 			}
 
 			case 2: {
+				teclado.nextLine();
 				usuario = userService.cadastroUser(teclado);
 				break;
 			}
