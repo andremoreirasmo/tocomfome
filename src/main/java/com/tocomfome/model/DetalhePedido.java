@@ -70,4 +70,10 @@ public class DetalhePedido {
 		this.valor = valor;
 	}
 
+	@Override
+	public String toString() {
+		return "DetalhePedido [id=" + id + ", idProduto=" + idProduto + ", quantidade=" + quantidade + ", valor="
+				+ valor + "]";
+	}
+
 }
