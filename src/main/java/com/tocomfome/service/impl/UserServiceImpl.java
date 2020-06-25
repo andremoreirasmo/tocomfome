@@ -1,5 +1,6 @@
 package com.tocomfome.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.tocomfome.dto.PedidoDTO;
 import com.tocomfome.enumerator.RoleEnum;
 import com.tocomfome.enumerator.UserActionsEnum;
+import com.tocomfome.model.Pedido;
 import com.tocomfome.model.Usuario;
 import com.tocomfome.repository.PedidoRepository;
 import com.tocomfome.repository.ProdutoRepository;
@@ -120,7 +122,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private void Pedidos(Scanner teclado) {
+		List<Pedido> listaPedidos = pedidoRepository.findAll();
+		listaPedidos.forEach(oPedido -> System.out.println(oPedido.toString()));
 
+		System.out.println("O que deseja fazer? [Detalhar pedido: 1/ Voltar: 2]");
+		if (applicationService.lerOpcao(teclado, ListUtil.toListArray(1, 2)).equals(1)) {
+			System.out.println("Informe o codigo do pedido:");
+			Long iCodigoPedido = teclado.nextLong();
+			Optional<Pedido> optionalPedido = listaPedidos.stream()
+					.filter(oPedido -> oPedido.getId().equals(iCodigoPedido)).findAny();
+
+			if (optionalPedido.isPresent()) {
+				pedidoService.getDetalhePedido(iCodigoPedido)
+						.forEach(oDetalhe -> System.out.println(oDetalhe.toString()));
+			} else {
+				System.out.println("Codigo do pedido inválido!");
+			}
+		}
 	}
 
 }

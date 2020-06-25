@@ -117,4 +117,9 @@ public class PedidoServiceImpl implements PedidoService {
 
 		detalhePedidoRepository.saveAll(pedido.getListaDetalhe());
 	}
+
+	@Override
+	public List<DetalhePedido> getDetalhePedido(Long idPedido) {
+		return detalhePedidoRepository.findByidPedido(idPedido);
+	}
 }
