@@ -108,6 +108,9 @@ public class PedidoServiceImpl implements PedidoService {
 		oRetorno.getPedido().setValorTotal(oRetorno.valorTotalPedido());
 
 		teclado.nextLine();
+		if (oRetorno.getListaDetalhe().isEmpty()) {
+			return null;
+		}
 		System.out.println("Informe o endereço da entrega:");
 		oRetorno.getPedido().setEndereco(teclado.nextLine());
 		return oRetorno;
