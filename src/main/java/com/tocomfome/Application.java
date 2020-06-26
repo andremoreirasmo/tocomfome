@@ -19,6 +19,12 @@ import com.tocomfome.service.ApplicationService;
 import com.tocomfome.service.UserService;
 import com.tocomfome.util.ListUtil;
 
+/**
+ * 
+ * @author André Luis, Dieferson Romanoski
+ *
+ */
+
 @SpringBootApplication
 @EnableJpaRepositories
 public class Application implements CommandLineRunner {
