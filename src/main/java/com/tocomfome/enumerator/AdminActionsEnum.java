@@ -7,7 +7,7 @@ public enum AdminActionsEnum {
 
 	NOVO_PRODUTO(1L, "Novo produto"),
 
-	LISTAR_PRODUTO(2L, "Listar Produto"),
+	LISTAR_PRODUTO(2L, "Listar Produtos"),
 
 	EDITAR_PRODUTO(3L, "Editar produto"),
 
