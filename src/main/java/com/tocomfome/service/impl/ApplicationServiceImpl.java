@@ -69,6 +69,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 	@Override
 	public void matarAplicacao() {
+		System.out.println("Aplicação finalizada");
 		SpringApplication.exit(applicationContext, () -> 0);
 		System.exit(0);
 	}
