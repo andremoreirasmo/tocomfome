@@ -1,10 +1,14 @@
 package com.tocomfome.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -22,13 +26,18 @@ public class Pedido {
 	@Column(name = "endereco")
 	private String endereco;
 
+	@Column(name = "idcliente")
+	private Long idCliente;
+
+	@Column(name = "valortotal")
+	private BigDecimal valorTotal;
+
+	@OneToOne()
+	@JoinColumn(name = "idcliente", insertable = false, updatable = false)
+	private Usuario cliente;
+
 	public Long getId() {
 		return id;
-	}
-
-	@Override
-	public String toString() {
-		return "Pedido [id=" + id + ", status=" + status + ", endereco=" + endereco + "]";
 	}
 
 	public void setId(Long id) {
@@ -49,6 +58,30 @@ public class Pedido {
 
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
+	}
+
+	public Long getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(Long idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	public BigDecimal getValorTotal() {
+		return valorTotal;
+	}
+
+	public void setValorTotal(BigDecimal valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+
+	public Usuario getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Usuario cliente) {
+		this.cliente = cliente;
 	}
 
 }

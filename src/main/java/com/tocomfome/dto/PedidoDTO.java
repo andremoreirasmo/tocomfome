@@ -1,9 +1,12 @@
 package com.tocomfome.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.tocomfome.model.DetalhePedido;
 import com.tocomfome.model.Pedido;
+import com.tocomfome.util.BigDecimalUtil;
 
 public class PedidoDTO {
 	private Pedido pedido;
@@ -23,6 +26,11 @@ public class PedidoDTO {
 
 	public void setListaDetalhe(List<DetalhePedido> listaDetalhe) {
 		this.listaDetalhe = listaDetalhe;
+	}
+
+	public BigDecimal valorTotalPedido() {
+		return BigDecimalUtil.soma(listaDetalhe.stream().map(DetalhePedido::getTotalDetalhe)
+				.collect(Collectors.toList()).toArray(new BigDecimal[0]));
 	}
 
 }

@@ -18,6 +18,8 @@ public class ApplicationServiceImpl implements ApplicationService {
 	@Autowired
 	private ApplicationContext applicationContext;
 
+	private Usuario usuario;
+
 	private Object getEntrada(Scanner teclado, Class<?> type) {
 		if (type.equals(Long.class))
 			return teclado.nextLong();
@@ -35,7 +37,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		Object retorno = getEntrada(teclado, opcoesValidas.get(0).getClass());
 		while (opcoesValidas.indexOf(retorno) == -1) {
 			System.out.println("Opção inválida!, digite novamente:");
-			retorno = teclado.nextLong();
+			retorno = getEntrada(teclado, opcoesValidas.get(0).getClass());
 		}
 
 		return retorno;
@@ -69,5 +71,15 @@ public class ApplicationServiceImpl implements ApplicationService {
 	public void matarAplicacao() {
 		SpringApplication.exit(applicationContext, () -> 0);
 		System.exit(0);
+	}
+
+	@Override
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	@Override
+	public Usuario getUsuario() {
+		return usuario;
 	}
 }

@@ -12,4 +12,8 @@ public interface ApplicationService {
 	public abstract void matarAplicacao();
 
 	public abstract Boolean login(Scanner teclado, Usuario usuario);
+
+	public abstract void setUsuario(Usuario usuario);
+
+	public abstract Usuario getUsuario();
 }

@@ -7,8 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.tocomfome.util.BigDecimalUtil;
 
 @Entity
 @Table(name = "detalhepedido")
@@ -29,6 +33,10 @@ public class DetalhePedido {
 
 	@Column(name = "valor")
 	private BigDecimal valor;
+
+	@OneToOne()
+	@JoinColumn(name = "idproduto", insertable = false, updatable = false)
+	private Produto produto;
 
 	public Long getId() {
 		return id;
@@ -70,10 +78,16 @@ public class DetalhePedido {
 		this.valor = valor;
 	}
 
-	@Override
-	public String toString() {
-		return "DetalhePedido [id=" + id + ", idProduto=" + idProduto + ", quantidade=" + quantidade + ", valor="
-				+ valor + "]";
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
+
+	public BigDecimal getTotalDetalhe() {
+		return BigDecimalUtil.multiplica(BigDecimal.valueOf(getQuantidade()), getValor());
 	}
 
 }

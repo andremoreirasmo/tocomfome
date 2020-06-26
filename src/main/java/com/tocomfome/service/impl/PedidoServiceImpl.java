@@ -62,6 +62,7 @@ public class PedidoServiceImpl implements PedidoService {
 					DetalhePedido oDetalhe = new DetalhePedido();
 					oDetalhe.setIdProduto(iCodigoProduto);
 					oDetalhe.setValor(oProduto.getValor());
+					oDetalhe.setProduto(oProduto);
 
 					System.out.println("Informe a quantidade do produto:");
 					oDetalhe.setQuantidade(teclado.nextLong());
@@ -103,6 +104,8 @@ public class PedidoServiceImpl implements PedidoService {
 
 		oRetorno.setPedido(new Pedido());
 		oRetorno.getPedido().setStatus(NAO_CONFIRMADO.getIntValue());
+		oRetorno.getPedido().setIdCliente(applicationService.getUsuario().getId());
+		oRetorno.getPedido().setValorTotal(oRetorno.valorTotalPedido());
 
 		teclado.nextLine();
 		System.out.println("Informe o endereço da entrega:");
@@ -124,7 +127,6 @@ public class PedidoServiceImpl implements PedidoService {
 
 	@Override
 	public List<DetalhePedido> getDetalhePedido(Long idPedido) {
-		// Todo: Buscar a descricao do produto
 		return detalhePedidoRepository.findByidPedido(idPedido);
 	}
 

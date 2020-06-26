@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.tocomfome.dto.PedidoDTO;
 import com.tocomfome.enumerator.RoleEnum;
+import com.tocomfome.enumerator.StatusPedidoEnum;
 import com.tocomfome.enumerator.UserActionsEnum;
 import com.tocomfome.model.Pedido;
 import com.tocomfome.model.Usuario;
@@ -67,6 +68,7 @@ public class UserServiceImpl implements UserService {
 
 			action = UserActionsEnum.getValueOf(teclado.nextLong());
 
+			System.out.println("__________________");
 			switch (action) {
 			case FAZER_PEDIDO: {
 				fazerPedido(teclado);
@@ -85,6 +87,7 @@ public class UserServiceImpl implements UserService {
 				break;
 
 			}
+			System.out.println("__________________");
 
 		} while (action != UserActionsEnum.SAIR);
 	}
@@ -107,6 +110,9 @@ public class UserServiceImpl implements UserService {
 		System.out.println("Informe uma senha:");
 		oUsuario.setSenha(teclado.nextLine());
 
+		System.out.println("Informe seu nome:");
+		oUsuario.setNome(teclado.nextLine());
+
 		oUsuario.setRole(RoleEnum.USER.getIntValue());
 		usuarioRepository.save(oUsuario);
 
@@ -116,16 +122,34 @@ public class UserServiceImpl implements UserService {
 	private void fazerPedido(Scanner teclado) {
 		PedidoDTO oPedido = pedidoService.efetuarPedido(teclado);
 
-		// Todo: Exibir produtos e quantidade, valor unitario, valor total produto
-		// Todo: Endereco e valor total pedido
+		System.out.println("Detalhes do pedido: ");
+		System.out.println("_____________________");
+		oPedido.getListaDetalhe()
+				.forEach(oDetalhe -> System.out.println("Produto: " + oDetalhe.getProduto().getDescricao()
+						+ ", quantidade: " + oDetalhe.getQuantidade() + ", Valor Un: " + oDetalhe.getValor()
+						+ ", Valor total: " + oDetalhe.getTotalDetalhe()));
+
+		System.out.println("_____________________");
+		System.out.println("Total Pedido:" + oPedido.valorTotalPedido());
+		System.out.println("Endereço: " + oPedido.getPedido().getEndereco());
+		System.out.println("_____________________");
+
 		System.out.println("Deseja efetivar pedido? [Sim: 1 / Não: 2]");
 		if (applicationService.lerOpcao(teclado, ListUtil.toListArray(1, 2)).equals(1))
 			pedidoService.salvarPedido(teclado, oPedido);
 	}
 
+	private List<Pedido> listarPedidos() {
+		List<Pedido> listaPedidos = pedidoRepository.findByIdCliente(applicationService.getUsuario().getId());
+		listaPedidos.forEach(oPedido -> System.out.println("Codigo: " + oPedido.getId() + ", Status: "
+				+ StatusPedidoEnum.getValueOf(oPedido.getStatus()).getDescricao() + ", Valor pedido: "
+				+ oPedido.getValorTotal() + ", Endereço:" + oPedido.getEndereco()));
+
+		return listaPedidos;
+	}
+
 	private void cancelarPedido(Scanner teclado) {
-		List<Pedido> listaPedidos = pedidoRepository.findAll();
-		listaPedidos.forEach(oPedido -> System.out.println(oPedido.toString()));
+		List<Pedido> listaPedidos = listarPedidos();
 
 		pedidoService.getPedido(teclado, listaPedidos).ifPresent(oPedido -> {
 			if (ListUtil.toListArray(NAO_CONFIRMADO.getIntValue(), CONFIRMADO.getIntValue())
@@ -139,17 +163,20 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private void Pedidos(Scanner teclado) {
-		// Todo: Endereco e valor total pedido, busca so do usuario logado
-		List<Pedido> listaPedidos = pedidoRepository.findAll();
-		listaPedidos.forEach(oPedido -> System.out.println(oPedido.toString()));
+		List<Pedido> listaPedidos = listarPedidos();
 
 		System.out.println("O que deseja fazer? [Detalhar pedido: 1/ Voltar: 2]");
 		if (applicationService.lerOpcao(teclado, ListUtil.toListArray(1, 2)).equals(1)) {
 
+			System.out.println("Detalhes do pedido: ");
+			System.out.println("_____________________");
 			pedidoService.getPedido(teclado, listaPedidos).ifPresent(oPedido -> {
 				pedidoService.getDetalhePedido(oPedido.getId())
-						.forEach(oDetalhe -> System.out.println(oDetalhe.toString()));
+						.forEach(oDetalhe -> System.out.println("Produto: " + oDetalhe.getProduto().getDescricao()
+								+ ", quantidade: " + oDetalhe.getQuantidade() + ", Valor Un: " + oDetalhe.getValor()
+								+ ", Valor total: " + oDetalhe.getTotalDetalhe()));
 			});
+			System.out.println("_____________________");
 		}
 	}
 

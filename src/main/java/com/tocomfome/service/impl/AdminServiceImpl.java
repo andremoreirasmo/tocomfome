@@ -55,6 +55,7 @@ public class AdminServiceImpl implements AdminService {
 
 			action = AdminActionsEnum.getValueOf(teclado.nextLong());
 
+			System.out.println("__________________");
 			switch (action) {
 			case NOVO_PRODUTO: {
 				novoProduto(teclado);
@@ -85,13 +86,21 @@ public class AdminServiceImpl implements AdminService {
 				break;
 
 			}
+			System.out.println("__________________");
 
 		} while (action != AdminActionsEnum.SAIR);
 
 	}
 
 	private void listarPedidos() {
-		pedidoRepository.findAll().forEach(oPedido -> System.out.println(oPedido.toString()));
+		List<Pedido> teste = pedidoRepository.findAll();
+
+		for (Pedido oPedido : teste) {
+			System.out.println("Codigo: " + oPedido.getId() + ", Status: "
+					+ StatusPedidoEnum.getValueOf(oPedido.getStatus()).getDescricao() + ", Valor pedido: "
+					+ oPedido.getValorTotal() + ", Endereço:" + oPedido.getEndereco() + ", Cliente: "
+					+ oPedido.getCliente().getNome());
+		}
 	}
 
 	private void editarPedido(Scanner teclado) {
@@ -114,6 +123,8 @@ public class AdminServiceImpl implements AdminService {
 				System.out.println("Informe um status: ");
 				oPedido.setStatus((Long) applicationService.lerOpcao(teclado,
 						listaStatus.stream().map(StatusPedidoEnum::getIntValue).collect(Collectors.toList())));
+
+				pedidoRepository.save(oPedido);
 			}
 		} else {
 			System.out.println("Pedido não encontrado");
