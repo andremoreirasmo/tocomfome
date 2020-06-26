@@ -122,21 +122,24 @@ public class UserServiceImpl implements UserService {
 	private void fazerPedido(Scanner teclado) {
 		PedidoDTO oPedido = pedidoService.efetuarPedido(teclado);
 
-		System.out.println("Detalhes do pedido: ");
-		System.out.println("_____________________");
-		oPedido.getListaDetalhe()
-				.forEach(oDetalhe -> System.out.println("Produto: " + oDetalhe.getProduto().getDescricao()
-						+ ", quantidade: " + oDetalhe.getQuantidade() + ", Valor Un: " + oDetalhe.getValor()
-						+ ", Valor total: " + oDetalhe.getTotalDetalhe()));
+		if (oPedido != null) {
 
-		System.out.println("_____________________");
-		System.out.println("Total Pedido:" + oPedido.valorTotalPedido());
-		System.out.println("Endereço: " + oPedido.getPedido().getEndereco());
-		System.out.println("_____________________");
+			System.out.println("Detalhes do pedido: ");
+			System.out.println("_____________________");
+			oPedido.getListaDetalhe()
+					.forEach(oDetalhe -> System.out.println("Produto: " + oDetalhe.getProduto().getDescricao()
+							+ ", quantidade: " + oDetalhe.getQuantidade() + ", Valor Un: " + oDetalhe.getValor()
+							+ ", Valor total: " + oDetalhe.getTotalDetalhe()));
 
-		System.out.println("Deseja efetivar pedido? [Sim: 1 / Não: 2]");
-		if (applicationService.lerOpcao(teclado, ListUtil.toListArray(1, 2)).equals(1))
-			pedidoService.salvarPedido(teclado, oPedido);
+			System.out.println("_____________________");
+			System.out.println("Total Pedido:" + oPedido.valorTotalPedido());
+			System.out.println("Endereço: " + oPedido.getPedido().getEndereco());
+			System.out.println("_____________________");
+
+			System.out.println("Deseja efetivar pedido? [Sim: 1 / Não: 2]");
+			if (applicationService.lerOpcao(teclado, ListUtil.toListArray(1, 2)).equals(1))
+				pedidoService.salvarPedido(teclado, oPedido);
+		}
 	}
 
 	private List<Pedido> listarPedidos() {
